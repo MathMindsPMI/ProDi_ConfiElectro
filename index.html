@@ -80,7 +80,7 @@
             z-index: 1;
             max-width: 800px;
             margin: 0 auto;
-            padding: 10px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -90,22 +90,22 @@
 
         /* Logo atómico animado */
         .logo-container {
-            margin: 20px 0 10px;
+            margin: 10px 0 5px;
             position: relative;
-            width: 150px;
-            height: 150px;
+            width: 100px;
+            height: 100px;
         }
 
         .atom-core {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             background: radial-gradient(circle, #ff00ff, #00ffff);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 40px #ff00ff, 0 0 60px #00ffff;
+            box-shadow: 0 0 30px #ff00ff, 0 0 40px #00ffff;
             animation: pulse 2s infinite;
         }
 
@@ -124,21 +124,21 @@
         }
 
         .orbit:nth-child(2) {
-            width: 90px;
-            height: 90px;
+            width: 60px;
+            height: 60px;
             animation: rotate 4s linear infinite;
         }
 
         .orbit:nth-child(3) {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             animation: rotate 6s linear infinite reverse;
             border-color: rgba(255, 0, 255, 0.3);
         }
 
         .orbit:nth-child(4) {
-            width: 150px;
-            height: 150px;
+            width: 100px;
+            height: 100px;
             animation: rotate 8s linear infinite;
             border-color: rgba(255, 215, 0, 0.3);
         }
@@ -172,13 +172,13 @@
 
         .logo-text {
             position: absolute;
-            bottom: -30px;
+            bottom: -25px;
             left: 50%;
             transform: translateX(-50%);
             font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 800;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             background: linear-gradient(90deg, #00ffff, #ff00ff, #ffd700, #00ffff);
             background-size: 200%;
             -webkit-background-clip: text;
@@ -262,8 +262,8 @@
         .controls {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin: 15px 0;
+            gap: 10px;
+            margin: 10px 0;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -338,7 +338,7 @@
             width: 100%;
             max-width: 280px;
             aspect-ratio: 0.7;
-            margin: 10px 0 20px;
+            margin: 10px 0 15px;
             perspective: 1000px;
         }
 
@@ -445,11 +445,11 @@
         }
 
         .expert-info {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 15px;
+            padding: 12px 15px;
             background: rgba(0, 255, 255, 0.05);
             border: 2px solid rgba(0, 255, 255, 0.2);
-            border-radius: 15px;
+            border-radius: 12px;
             display: block;
             animation: infoSlide 0.5s ease;
         }
@@ -478,8 +478,8 @@
         .info-item {
             display: flex;
             justify-content: space-between;
-            margin: 10px 0;
-            font-size: 0.95rem;
+            margin: 6px 0;
+            font-size: 0.8rem;
         }
 
         .info-label {
@@ -636,7 +636,30 @@
             border-radius: 15px;
             border: 2px solid rgba(0, 255, 255, 0.3);
             max-width: 100%;
+            max-height: 280px;
             overflow-x: auto;
+            overflow-y: auto;
+        }
+
+        /* Estilo de la barra de scroll */
+        .electron-config::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .electron-config::-webkit-scrollbar-track {
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .electron-config::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .electron-config::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #00ffff, #0080ff);
         }
 
         .orbital-diagram {
@@ -803,6 +826,12 @@
             .electron-config {
                 font-size: 0.95rem;
                 padding: 15px 10px;
+                max-height: 250px;
+            }
+
+            .electron-config::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
             }
 
             .orbital {
@@ -835,7 +864,7 @@
     <div class="stars" id="stars"></div>
 
     <!-- Logo superior izquierdo -->
-    <img src="mnt/logo.png" alt="ConfiElectro Logo" class="top-logo">
+    <img src="logo.png" alt="ConfiElectro Logo" class="top-logo">
 
     <div class="container">
         <!-- Logo Atómico -->
