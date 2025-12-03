@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfiElectro - Baraja Química</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: #0a0014;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Fondo animado con estrellas */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Partículas flotantes de colores */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+            50% { transform: translateY(-50px) rotate(180deg); opacity: 1; }
+        }
+
+        .top-logo {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 100;
+            width: 80px;
+            height: auto;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.3));
+        }
+
+        .top-logo:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        /* Logo atómico animado */
+        .logo-container {
+            margin: 20px 0 10px;
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .atom-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #ff00ff, #00ffff);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 40px #ff00ff, 0 0 60px #00ffff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .orbit:nth-child(2) {
+            width: 90px;
+            height: 90px;
+            animation: rotate 4s linear infinite;
+        }
+
+        .orbit:nth-child(3) {
+            width: 120px;
+            height: 120px;
+            animation: rotate 6s linear infinite reverse;
+            border-color: rgba(255, 0, 255, 0.3);
+        }
+
+        .orbit:nth-child(4) {
+            width: 150px;
+            height: 150px;
+            animation: rotate 8s linear infinite;
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .electron {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #00ffff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #00ffff;
+            top: -6px;
+            left: 50%;
+            margin-left: -6px;
+        }
+
+        .orbit:nth-child(3) .electron {
+            background: #ff00ff;
+            box-shadow: 0 0 15px #ff00ff;
+        }
+
+        .orbit:nth-child(4) .electron {
+            background: #ffd700;
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        .logo-text {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff, #ffd700, #00ffff);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0%; }
+            100% { background-position: 200%; }
+        }
+
+        h1 {
+            display: none;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 30px;
+            margin: 15px 0;
+            align-items: center;
+        }
+
+        .mode-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        .mode-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .mode-option input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00ffff;
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-option input[type="radio"]:checked {
+            border-color: #ff00ff;
+            box-shadow: 0 0 15px #ff00ff;
+        }
+
+        .mode-option input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: radioAppear 0.3s ease;
+        }
+
+        @keyframes radioAppear {
+            from { transform: translate(-50%, -50%) scale(0); }
+            to { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .mode-option label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .next-btn, .config-btn {
+            font-family: 'Orbitron', sans-serif;
+            padding: 12px 25px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: none;
+            background: linear-gradient(135deg, #00ffff, #0080ff, #ff00ff);
+            background-size: 200%;
+            color: white;
+            cursor: pointer;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 30px rgba(0, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .config-btn {
+            background: linear-gradient(135deg, #ffd700, #ff8800, #ff00ff);
+            box-shadow: 0 5px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .next-btn::before, .config-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .next-btn:hover::before, .config-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .next-btn:hover {
+            background-position: 100%;
+            box-shadow: 0 8px 40px rgba(255, 0, 255, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .config-btn:hover {
+            background-position: 100%;
+            box-shadow: 0 8px 40px rgba(255, 215, 0, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .next-btn:active, .config-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .counter {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .card-area {
+            width: 100%;
+            max-width: 350px;
+            aspect-ratio: 0.7;
+            margin: 15px 0 30px;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0033 0%, #000428 100%);
+            border: 4px solid;
+            border-image: linear-gradient(135deg, #00ffff, #ff00ff, #ffd700) 1;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 0 40px rgba(0, 255, 255, 0.3),
+                0 0 80px rgba(255, 0, 255, 0.2),
+                inset 0 0 60px rgba(0, 255, 255, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+            animation: cardGlow 4s linear infinite;
+        }
+
+        @keyframes cardGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .card-inner {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: cardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes cardEntrance {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotateY(180deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        .atomic-number {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            animation: numberPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes numberPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .symbol {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(5rem, 15vw, 9rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #00ffff 0%, #0080ff 50%, #ff00ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 40px 0 20px;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.6));
+            animation: symbolFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes symbolFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .name {
+            font-family: 'Exo 2', sans-serif;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 600;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            margin-top: 10px;
+        }
+
+        .expert-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 255, 255, 0.05);
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            display: block;
+            animation: infoSlide 0.5s ease;
+        }
+
+        @keyframes infoSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .expert-mode .atomic-number,
+        .expert-mode .name,
+        .expert-mode .expert-info {
+            display: none;
+        }
+
+        .expert-mode .symbol {
+            margin: 80px 0;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 0.95rem;
+        }
+
+        .info-label {
+            color: #00ffff;
+            font-weight: 600;
+        }
+
+        .info-value {
+            color: #fff;
+            font-weight: 400;
+        }
+
+        /* Modal para configuración electrónica */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a0033 0%, #000428 100%);
+            padding: 40px;
+            border-radius: 30px;
+            max-width: 500px;
+            width: 90%;
+            aspect-ratio: 0.75;
+            border: 4px solid;
+            border-image: linear-gradient(135deg, #00ffff, #ff00ff, #ffd700) 1;
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.5);
+            animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.7) translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: #ff00ff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #00ffff;
+            transform: rotate(90deg);
+        }
+
+        .modal-atomic-number {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            animation: numberPulse 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            text-align: center;
+        }
+
+        .modal-symbol {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(4rem, 12vw, 7rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #00ffff 0%, #0080ff 50%, #ff00ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.6));
+            line-height: 1;
+        }
+
+        .modal-element-name {
+            font-family: 'Exo 2', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 600;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .modal-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .electron-config {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #fff;
+            background: rgba(0, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .orbital-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px;
+            min-width: 280px;
+        }
+
+        .energy-level {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .level-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: #00ffff;
+            min-width: 35px;
+            font-weight: 600;
+        }
+
+        .orbitals-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .orbital {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #fff;
+            position: relative;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .orbital.filled {
+            box-shadow: 0 0 12px currentColor;
+            animation: orbitalPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes orbitalPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .orbital.empty {
+            opacity: 0.3;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .orbital.s {
+            background: linear-gradient(135deg, #ffa500, #ff8c00);
+        }
+
+        .orbital.p {
+            background: linear-gradient(135deg, #00cc66, #009944);
+        }
+
+        .orbital.d {
+            background: linear-gradient(135deg, #cc00cc, #990099);
+        }
+
+        .orbital.f {
+            background: linear-gradient(135deg, #00ccff, #0099cc);
+        }
+
+        .orbital sup {
+            font-size: 0.7em;
+        }
+
+        /* Efecto de destello en el botón */
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .next-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .logo-container {
+                width: 120px;
+                height: 120px;
+                margin: 15px 0 5px;
+            }
+
+            .orbit:nth-child(2) {
+                width: 70px;
+                height: 70px;
+            }
+
+            .orbit:nth-child(3) {
+                width: 95px;
+                height: 95px;
+            }
+
+            .orbit:nth-child(4) {
+                width: 120px;
+                height: 120px;
+            }
+
+            .top-logo {
+                width: 60px;
+                top: 10px;
+                left: 10px;
+            }
+
+            .mode-selector {
+                gap: 20px;
+                margin: 10px 0;
+            }
+
+            .mode-option label {
+                font-size: 1rem;
+            }
+
+            .controls {
+                gap: 10px;
+                margin: 10px 0;
+            }
+
+            .next-btn, .config-btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+
+            .card-area {
+                max-width: 90%;
+                margin: 10px 0 20px;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+                aspect-ratio: 0.8;
+            }
+
+            .modal-symbol {
+                font-size: 4rem;
+            }
+
+            .modal-element-name {
+                font-size: 1.3rem;
+            }
+
+            .electron-config {
+                font-size: 0.95rem;
+                padding: 15px 10px;
+            }
+
+            .orbital {
+                width: 32px;
+                height: 32px;
+                font-size: 0.65rem;
+            }
+
+            .level-label {
+                font-size: 0.7rem;
+                min-width: 30px;
+            }
+
+            .orbitals-row {
+                gap: 6px;
+            }
+
+            .energy-level {
+                gap: 8px;
+            }
+
+            .orbital-diagram {
+                gap: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Estrellas de fondo -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Logo superior izquierdo -->
+    <img src="mnt/logo.png" alt="ConfiElectro Logo" class="top-logo">
+
+    <div class="container">
+        <!-- Logo Atómico -->
+        <div class="logo-container">
+            <div class="atom-core"></div>
+            <div class="orbit">
+                <div class="electron"></div>
+            </div>
+            <div class="orbit">
+                <div class="electron"></div>
+            </div>
+            <div class="orbit">
+                <div class="electron"></div>
+            </div>
+            <div class="logo-text">CONFIELECTRO</div>
+        </div>
+
+        <h1>CONFIELECTRO</h1>
+
+        <!-- Selector de Modo -->
+        <div class="mode-selector">
+            <div class="mode-option">
+                <input type="radio" name="mode" id="modeBasic" value="basic" checked>
+                <label for="modeBasic">Modo Básico</label>
+            </div>
+            <div class="mode-option">
+                <input type="radio" name="mode" id="modeExpert" value="expert">
+                <label for="modeExpert">Modo Experto</label>
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="controls">
+            <button class="next-btn" onclick="nextCard()">Siguiente carta</button>
+            <button class="config-btn" onclick="showElectronConfig()">⚛ Configuración Electrónica</button>
+            <div class="counter"><span id="current">1</span> / <span id="total">118</span></div>
+        </div>
+
+        <!-- Área de la Carta -->
+        <div class="card-area">
+            <div class="card" id="card">
+                <div class="card-inner">
+                    <div class="atomic-number" id="atomicNumber">1</div>
+                    <div class="symbol" id="symbol">H</div>
+                    <div class="name" id="name">Hidrógeno</div>
+                    <div class="expert-info" id="expertInfo">
+                        <div class="info-item">
+                            <span class="info-label">Masa Atómica:</span>
+                            <span class="info-value" id="mass">1.008</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Categoría:</span>
+                            <span class="info-value" id="category">No metal</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Estado:</span>
+                            <span class="info-value" id="state">Gas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Configuración Electrónica -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="modal-atomic-number" id="modalAtomicNumber">1</div>
+            <div class="modal-body">
+                <div class="modal-symbol" id="modalSymbol">H</div>
+                <div class="modal-element-name" id="modalElementName">Hidrógeno</div>
+                <h3 class="modal-header">Configuración Electrónica</h3>
+                <div class="electron-config" id="electronConfig">1s¹</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para generar configuración electrónica visual
+        function getElectronConfiguration(atomicNumber) {
+            // Estructura de orbitales organizados por nivel energético
+            const orbitalStructure = [
+                { n: 1, orbitals: [{ type: 's', max: 2 }] },
+                { n: 2, orbitals: [{ type: 's', max: 2 }, { type: 'p', max: 6 }] },
+                { n: 3, orbitals: [{ type: 's', max: 2 }, { type: 'p', max: 6 }, { type: 'd', max: 10 }] },
+                { n: 4, orbitals: [{ type: 's', max: 2 }, { type: 'p', max: 6 }, { type: 'd', max: 10 }, { type: 'f', max: 14 }] },
+                { n: 5, orbitals: [{ type: 's', max: 2 }, { type: 'p', max: 6 }, { type: 'd', max: 10 }, { type: 'f', max: 14 }] },
+                { n: 6, orbitals: [{ type: 's', max: 2 }, { type: 'p', max: 6 }, { type: 'd', max: 10 }] },
+                { n: 7, orbitals: [{ type: 's', max: 2 }, { type: 'p', max: 6 }] },
+                { n: 8, orbitals: [{ type: 's', max: 2 }] }
+            ];
+
+            // Orden de llenado según el principio de Aufbau
+            const fillOrder = [
+                { n: 1, type: 's', max: 2 },
+                { n: 2, type: 's', max: 2 },
+                { n: 2, type: 'p', max: 6 },
+                { n: 3, type: 's', max: 2 },
+                { n: 3, type: 'p', max: 6 },
+                { n: 4, type: 's', max: 2 },
+                { n: 3, type: 'd', max: 10 },
+                { n: 4, type: 'p', max: 6 },
+                { n: 5, type: 's', max: 2 },
+                { n: 4, type: 'd', max: 10 },
+                { n: 5, type: 'p', max: 6 },
+                { n: 6, type: 's', max: 2 },
+                { n: 4, type: 'f', max: 14 },
+                { n: 5, type: 'd', max: 10 },
+                { n: 6, type: 'p', max: 6 },
+                { n: 7, type: 's', max: 2 },
+                { n: 5, type: 'f', max: 14 },
+                { n: 6, type: 'd', max: 10 },
+                { n: 7, type: 'p', max: 6 },
+                { n: 8, type: 's', max: 2 }
+            ];
+
+            // Calcular la configuración electrónica
+            const electronConfig = {};
+            let remaining = atomicNumber;
+
+            for (let orbital of fillOrder) {
+                const key = `${orbital.n}${orbital.type}`;
+                const electrons = Math.min(remaining, orbital.max);
+                electronConfig[key] = electrons;
+                remaining -= electrons;
+                if (remaining <= 0) break;
+            }
+
+            // Generar HTML del diagrama
+            let html = '<div class="orbital-diagram">';
+
+            for (let level of orbitalStructure) {
+                html += `<div class="energy-level">`;
+                html += `<div class="level-label">n=${level.n}</div>`;
+                html += `<div class="orbitals-row">`;
+
+                for (let orbital of level.orbitals) {
+                    const key = `${level.n}${orbital.type}`;
+                    const electrons = electronConfig[key] || 0;
+                    const isFilled = electrons > 0;
+                    const fillClass = isFilled ? 'filled' : 'empty';
+                    const superscript = electrons > 0 ? `<sup>${electrons}</sup>` : '';
+
+                    html += `<div class="orbital ${orbital.type} ${fillClass}" title="${key}: ${electrons}/${orbital.max} electrones">`;
+                    html += `${level.n}${orbital.type}${superscript}`;
+                    html += `</div>`;
+                }
+
+                html += `</div></div>`;
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        // Datos de los elementos químicos con información adicional
+        const elements = [
+            { number: 1, symbol: 'H', name: 'Hidrógeno', mass: '1.008', category: 'No metal', state: 'Gas' },
+            { number: 2, symbol: 'He', name: 'Helio', mass: '4.003', category: 'Gas noble', state: 'Gas' },
+            { number: 3, symbol: 'Li', name: 'Litio', mass: '6.941', category: 'Metal alcalino', state: 'Sólido' },
+            { number: 4, symbol: 'Be', name: 'Berilio', mass: '9.012', category: 'Metal alcalinotérreo', state: 'Sólido' },
+            { number: 5, symbol: 'B', name: 'Boro', mass: '10.811', category: 'Metaloide', state: 'Sólido' },
+            { number: 6, symbol: 'C', name: 'Carbono', mass: '12.011', category: 'No metal', state: 'Sólido' },
+            { number: 7, symbol: 'N', name: 'Nitrógeno', mass: '14.007', category: 'No metal', state: 'Gas' },
+            { number: 8, symbol: 'O', name: 'Oxígeno', mass: '15.999', category: 'No metal', state: 'Gas' },
+            { number: 9, symbol: 'F', name: 'Flúor', mass: '18.998', category: 'Halógeno', state: 'Gas' },
+            { number: 10, symbol: 'Ne', name: 'Neón', mass: '20.180', category: 'Gas noble', state: 'Gas' },
+            { number: 11, symbol: 'Na', name: 'Sodio', mass: '22.990', category: 'Metal alcalino', state: 'Sólido' },
+            { number: 12, symbol: 'Mg', name: 'Magnesio', mass: '24.305', category: 'Metal alcalinotérreo', state: 'Sólido' },
+            { number: 13, symbol: 'Al', name: 'Aluminio', mass: '26.982', category: 'Metal', state: 'Sólido' },
+            { number: 14, symbol: 'Si', name: 'Silicio', mass: '28.086', category: 'Metaloide', state: 'Sólido' },
+            { number: 15, symbol: 'P', name: 'Fósforo', mass: '30.974', category: 'No metal', state: 'Sólido' },
+            { number: 16, symbol: 'S', name: 'Azufre', mass: '32.065', category: 'No metal', state: 'Sólido' },
+            { number: 17, symbol: 'Cl', name: 'Cloro', mass: '35.453', category: 'Halógeno', state: 'Gas' },
+            { number: 18, symbol: 'Ar', name: 'Argón', mass: '39.948', category: 'Gas noble', state: 'Gas' },
+            { number: 19, symbol: 'K', name: 'Potasio', mass: '39.098', category: 'Metal alcalino', state: 'Sólido' },
+            { number: 20, symbol: 'Ca', name: 'Calcio', mass: '40.078', category: 'Metal alcalinotérreo', state: 'Sólido' },
+            { number: 21, symbol: 'Sc', name: 'Escandio', mass: '44.956', category: 'Metal de transición', state: 'Sólido' },
+            { number: 22, symbol: 'Ti', name: 'Titanio', mass: '47.867', category: 'Metal de transición', state: 'Sólido' },
+            { number: 23, symbol: 'V', name: 'Vanadio', mass: '50.942', category: 'Metal de transición', state: 'Sólido' },
+            { number: 24, symbol: 'Cr', name: 'Cromo', mass: '51.996', category: 'Metal de transición', state: 'Sólido' },
+            { number: 25, symbol: 'Mn', name: 'Manganeso', mass: '54.938', category: 'Metal de transición', state: 'Sólido' },
+            { number: 26, symbol: 'Fe', name: 'Hierro', mass: '55.845', category: 'Metal de transición', state: 'Sólido' },
+            { number: 27, symbol: 'Co', name: 'Cobalto', mass: '58.933', category: 'Metal de transición', state: 'Sólido' },
+            { number: 28, symbol: 'Ni', name: 'Níquel', mass: '58.693', category: 'Metal de transición', state: 'Sólido' },
+            { number: 29, symbol: 'Cu', name: 'Cobre', mass: '63.546', category: 'Metal de transición', state: 'Sólido' },
+            { number: 30, symbol: 'Zn', name: 'Zinc', mass: '65.380', category: 'Metal de transición', state: 'Sólido' },
+            { number: 31, symbol: 'Ga', name: 'Galio', mass: '69.723', category: 'Metal', state: 'Sólido' },
+            { number: 32, symbol: 'Ge', name: 'Germanio', mass: '72.640', category: 'Metaloide', state: 'Sólido' },
+            { number: 33, symbol: 'As', name: 'Arsénico', mass: '74.922', category: 'Metaloide', state: 'Sólido' },
+            { number: 34, symbol: 'Se', name: 'Selenio', mass: '78.960', category: 'No metal', state: 'Sólido' },
+            { number: 35, symbol: 'Br', name: 'Bromo', mass: '79.904', category: 'Halógeno', state: 'Líquido' },
+            { number: 36, symbol: 'Kr', name: 'Kriptón', mass: '83.798', category: 'Gas noble', state: 'Gas' },
+            { number: 37, symbol: 'Rb', name: 'Rubidio', mass: '85.468', category: 'Metal alcalino', state: 'Sólido' },
+            { number: 38, symbol: 'Sr', name: 'Estroncio', mass: '87.620', category: 'Metal alcalinotérreo', state: 'Sólido' },
+            { number: 39, symbol: 'Y', name: 'Itrio', mass: '88.906', category: 'Metal de transición', state: 'Sólido' },
+            { number: 40, symbol: 'Zr', name: 'Circonio', mass: '91.224', category: 'Metal de transición', state: 'Sólido' },
+            { number: 41, symbol: 'Nb', name: 'Niobio', mass: '92.906', category: 'Metal de transición', state: 'Sólido' },
+            { number: 42, symbol: 'Mo', name: 'Molibdeno', mass: '95.960', category: 'Metal de transición', state: 'Sólido' },
+            { number: 43, symbol: 'Tc', name: 'Tecnecio', mass: '98', category: 'Metal de transición', state: 'Sólido' },
+            { number: 44, symbol: 'Ru', name: 'Rutenio', mass: '101.07', category: 'Metal de transición', state: 'Sólido' },
+            { number: 45, symbol: 'Rh', name: 'Rodio', mass: '102.91', category: 'Metal de transición', state: 'Sólido' },
+            { number: 46, symbol: 'Pd', name: 'Paladio', mass: '106.42', category: 'Metal de transición', state: 'Sólido' },
+            { number: 47, symbol: 'Ag', name: 'Plata', mass: '107.87', category: 'Metal de transición', state: 'Sólido' },
+            { number: 48, symbol: 'Cd', name: 'Cadmio', mass: '112.41', category: 'Metal de transición', state: 'Sólido' },
+            { number: 49, symbol: 'In', name: 'Indio', mass: '114.82', category: 'Metal', state: 'Sólido' },
+            { number: 50, symbol: 'Sn', name: 'Estaño', mass: '118.71', category: 'Metal', state: 'Sólido' },
+            { number: 51, symbol: 'Sb', name: 'Antimonio', mass: '121.76', category: 'Metaloide', state: 'Sólido' },
+            { number: 52, symbol: 'Te', name: 'Telurio', mass: '127.60', category: 'Metaloide', state: 'Sólido' },
+            { number: 53, symbol: 'I', name: 'Yodo', mass: '126.90', category: 'Halógeno', state: 'Sólido' },
+            { number: 54, symbol: 'Xe', name: 'Xenón', mass: '131.29', category: 'Gas noble', state: 'Gas' },
+            { number: 55, symbol: 'Cs', name: 'Cesio', mass: '132.91', category: 'Metal alcalino', state: 'Sólido' },
+            { number: 56, symbol: 'Ba', name: 'Bario', mass: '137.33', category: 'Metal alcalinotérreo', state: 'Sólido' },
+            { number: 57, symbol: 'La', name: 'Lantano', mass: '138.91', category: 'Lantánido', state: 'Sólido' },
+            { number: 58, symbol: 'Ce', name: 'Cerio', mass: '140.12', category: 'Lantánido', state: 'Sólido' },
+            { number: 59, symbol: 'Pr', name: 'Praseodimio', mass: '140.91', category: 'Lantánido', state: 'Sólido' },
+            { number: 60, symbol: 'Nd', name: 'Neodimio', mass: '144.24', category: 'Lantánido', state: 'Sólido' },
+            { number: 61, symbol: 'Pm', name: 'Prometio', mass: '145', category: 'Lantánido', state: 'Sólido' },
+            { number: 62, symbol: 'Sm', name: 'Samario', mass: '150.36', category: 'Lantánido', state: 'Sólido' },
+            { number: 63, symbol: 'Eu', name: 'Europio', mass: '151.96', category: 'Lantánido', state: 'Sólido' },
+            { number: 64, symbol: 'Gd', name: 'Gadolinio', mass: '157.25', category: 'Lantánido', state: 'Sólido' },
+            { number: 65, symbol: 'Tb', name: 'Terbio', mass: '158.93', category: 'Lantánido', state: 'Sólido' },
+            { number: 66, symbol: 'Dy', name: 'Disprosio', mass: '162.50', category: 'Lantánido', state: 'Sólido' },
+            { number: 67, symbol: 'Ho', name: 'Holmio', mass: '164.93', category: 'Lantánido', state: 'Sólido' },
+            { number: 68, symbol: 'Er', name: 'Erbio', mass: '167.26', category: 'Lantánido', state: 'Sólido' },
+            { number: 69, symbol: 'Tm', name: 'Tulio', mass: '168.93', category: 'Lantánido', state: 'Sólido' },
+            { number: 70, symbol: 'Yb', name: 'Iterbio', mass: '173.05', category: 'Lantánido', state: 'Sólido' },
+            { number: 71, symbol: 'Lu', name: 'Lutecio', mass: '174.97', category: 'Lantánido', state: 'Sólido' },
+            { number: 72, symbol: 'Hf', name: 'Hafnio', mass: '178.49', category: 'Metal de transición', state: 'Sólido' },
+            { number: 73, symbol: 'Ta', name: 'Tantalio', mass: '180.95', category: 'Metal de transición', state: 'Sólido' },
+            { number: 74, symbol: 'W', name: 'Wolframio', mass: '183.84', category: 'Metal de transición', state: 'Sólido' },
+            { number: 75, symbol: 'Re', name: 'Renio', mass: '186.21', category: 'Metal de transición', state: 'Sólido' },
+            { number: 76, symbol: 'Os', name: 'Osmio', mass: '190.23', category: 'Metal de transición', state: 'Sólido' },
+            { number: 77, symbol: 'Ir', name: 'Iridio', mass: '192.22', category: 'Metal de transición', state: 'Sólido' },
+            { number: 78, symbol: 'Pt', name: 'Platino', mass: '195.08', category: 'Metal de transición', state: 'Sólido' },
+            { number: 79, symbol: 'Au', name: 'Oro', mass: '196.97', category: 'Metal de transición', state: 'Sólido' },
+            { number: 80, symbol: 'Hg', name: 'Mercurio', mass: '200.59', category: 'Metal de transición', state: 'Líquido' },
+            { number: 81, symbol: 'Tl', name: 'Talio', mass: '204.38', category: 'Metal', state: 'Sólido' },
+            { number: 82, symbol: 'Pb', name: 'Plomo', mass: '207.2', category: 'Metal', state: 'Sólido' },
+            { number: 83, symbol: 'Bi', name: 'Bismuto', mass: '208.98', category: 'Metal', state: 'Sólido' },
+            { number: 84, symbol: 'Po', name: 'Polonio', mass: '209', category: 'Metaloide', state: 'Sólido' },
+            { number: 85, symbol: 'At', name: 'Astato', mass: '210', category: 'Halógeno', state: 'Sólido' },
+            { number: 86, symbol: 'Rn', name: 'Radón', mass: '222', category: 'Gas noble', state: 'Gas' },
+            { number: 87, symbol: 'Fr', name: 'Francio', mass: '223', category: 'Metal alcalino', state: 'Sólido' },
+            { number: 88, symbol: 'Ra', name: 'Radio', mass: '226', category: 'Metal alcalinotérreo', state: 'Sólido' },
+            { number: 89, symbol: 'Ac', name: 'Actinio', mass: '227', category: 'Actínido', state: 'Sólido' },
+            { number: 90, symbol: 'Th', name: 'Torio', mass: '232.04', category: 'Actínido', state: 'Sólido' },
+            { number: 91, symbol: 'Pa', name: 'Protactinio', mass: '231.04', category: 'Actínido', state: 'Sólido' },
+            { number: 92, symbol: 'U', name: 'Uranio', mass: '238.03', category: 'Actínido', state: 'Sólido' },
+            { number: 93, symbol: 'Np', name: 'Neptunio', mass: '237', category: 'Actínido', state: 'Sólido' },
+            { number: 94, symbol: 'Pu', name: 'Plutonio', mass: '244', category: 'Actínido', state: 'Sólido' },
+            { number: 95, symbol: 'Am', name: 'Americio', mass: '243', category: 'Actínido', state: 'Sólido' },
+            { number: 96, symbol: 'Cm', name: 'Curio', mass: '247', category: 'Actínido', state: 'Sólido' },
+            { number: 97, symbol: 'Bk', name: 'Berkelio', mass: '247', category: 'Actínido', state: 'Sólido' },
+            { number: 98, symbol: 'Cf', name: 'Californio', mass: '251', category: 'Actínido', state: 'Sólido' },
+            { number: 99, symbol: 'Es', name: 'Einsteinio', mass: '252', category: 'Actínido', state: 'Sólido' },
+            { number: 100, symbol: 'Fm', name: 'Fermio', mass: '257', category: 'Actínido', state: 'Sólido' },
+            { number: 101, symbol: 'Md', name: 'Mendelevio', mass: '258', category: 'Actínido', state: 'Sólido' },
+            { number: 102, symbol: 'No', name: 'Nobelio', mass: '259', category: 'Actínido', state: 'Sólido' },
+            { number: 103, symbol: 'Lr', name: 'Lawrencio', mass: '262', category: 'Actínido', state: 'Sólido' },
+            { number: 104, symbol: 'Rf', name: 'Rutherfordio', mass: '267', category: 'Metal de transición', state: 'Sólido' },
+            { number: 105, symbol: 'Db', name: 'Dubnio', mass: '268', category: 'Metal de transición', state: 'Sólido' },
+            { number: 106, symbol: 'Sg', name: 'Seaborgio', mass: '271', category: 'Metal de transición', state: 'Sólido' },
+            { number: 107, symbol: 'Bh', name: 'Bohrio', mass: '272', category: 'Metal de transición', state: 'Sólido' },
+            { number: 108, symbol: 'Hs', name: 'Hasio', mass: '270', category: 'Metal de transición', state: 'Sólido' },
+            { number: 109, symbol: 'Mt', name: 'Meitnerio', mass: '276', category: 'Metal de transición', state: 'Sólido' },
+            { number: 110, symbol: 'Ds', name: 'Darmstadtio', mass: '281', category: 'Metal de transición', state: 'Sólido' },
+            { number: 111, symbol: 'Rg', name: 'Roentgenio', mass: '280', category: 'Metal de transición', state: 'Sólido' },
+            { number: 112, symbol: 'Cn', name: 'Copernicio', mass: '285', category: 'Metal de transición', state: 'Sólido' },
+            { number: 113, symbol: 'Nh', name: 'Nihonio', mass: '284', category: 'Metal', state: 'Sólido' },
+            { number: 114, symbol: 'Fl', name: 'Flerovio', mass: '289', category: 'Metal', state: 'Sólido' },
+            { number: 115, symbol: 'Mc', name: 'Moscovio', mass: '288', category: 'Metal', state: 'Sólido' },
+            { number: 116, symbol: 'Lv', name: 'Livermorio', mass: '293', category: 'Metal', state: 'Sólido' },
+            { number: 117, symbol: 'Ts', name: 'Teneso', mass: '294', category: 'Halógeno', state: 'Sólido' },
+            { number: 118, symbol: 'Og', name: 'Oganesón', mass: '294', category: 'Gas noble', state: 'Sólido' }
+        ];
+
+        let currentIndex = 0;
+        let shuffledDeck = [...elements];
+        let currentElement = shuffledDeck[0];
+
+        // Crear estrellas
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Crear partículas flotantes
+        function createParticles() {
+            const colors = ['#00ffff', '#ff00ff', '#ffd700', '#00ff00'];
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 8 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                document.body.appendChild(particle);
+            }
+        }
+
+        // Barajar el mazo (Fisher-Yates)
+        function shuffle(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Mostrar carta
+        function showCard(element) {
+            const card = document.getElementById('card');
+            const cardInner = card.querySelector('.card-inner');
+
+            // Remover animación y añadirla de nuevo
+            cardInner.style.animation = 'none';
+            setTimeout(() => {
+                cardInner.style.animation = 'cardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            }, 10);
+
+            document.getElementById('atomicNumber').textContent = element.number;
+            document.getElementById('symbol').textContent = element.symbol;
+            document.getElementById('name').textContent = element.name;
+            document.getElementById('mass').textContent = element.mass;
+            document.getElementById('category').textContent = element.category;
+            document.getElementById('state').textContent = element.state;
+
+            currentElement = element;
+        }
+
+        // Siguiente carta
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % shuffledDeck.length;
+            if (currentIndex === 0) {
+                shuffledDeck = shuffle(elements);
+            }
+            showCard(shuffledDeck[currentIndex]);
+            document.getElementById('current').textContent = currentIndex + 1;
+        }
+
+        // Mostrar configuración electrónica
+        function showElectronConfig() {
+            const modal = document.getElementById('configModal');
+            const config = getElectronConfiguration(currentElement.number);
+
+            document.getElementById('modalAtomicNumber').textContent = currentElement.number;
+            document.getElementById('modalSymbol').textContent = currentElement.symbol;
+            document.getElementById('modalElementName').textContent = currentElement.name;
+            document.getElementById('electronConfig').innerHTML = config;
+
+            modal.classList.add('active');
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('configModal').classList.remove('active');
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('configModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Cambiar modo
+        document.getElementById('modeBasic').addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelector('.card-inner').classList.remove('expert-mode');
+            }
+        });
+
+        document.getElementById('modeExpert').addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelector('.card-inner').classList.add('expert-mode');
+            }
+        });
+
+        // Inicializar
+        createStars();
+        createParticles();
+        shuffledDeck = shuffle(elements);
+        showCard(shuffledDeck[0]);
+        document.getElementById('total').textContent = elements.length;
+        document.getElementById('current').textContent = 1;
+    </script>
+</body>
+</html>
