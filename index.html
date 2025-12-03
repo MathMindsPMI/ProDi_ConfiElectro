@@ -514,11 +514,11 @@
 
         .modal-content {
             background: linear-gradient(135deg, #1a0033 0%, #000428 100%);
-            padding: 40px;
+            padding: 35px 25px;
             border-radius: 30px;
-            max-width: 500px;
-            width: 90%;
-            aspect-ratio: 0.75;
+            max-width: 550px;
+            width: 95%;
+            max-height: 90vh;
             border: 4px solid;
             border-image: linear-gradient(135deg, #00ffff, #ff00ff, #ffd700) 1;
             box-shadow: 0 0 60px rgba(0, 255, 255, 0.5);
@@ -570,10 +570,10 @@
 
         .modal-atomic-number {
             position: absolute;
-            top: 25px;
-            left: 30px;
+            top: 20px;
+            left: 25px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 800;
             background: linear-gradient(135deg, #00ffff, #0080ff);
             -webkit-background-clip: text;
@@ -584,61 +584,62 @@
             z-index: 10;
         }
 
-        .modal-body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            text-align: center;
-        }
-
         .modal-symbol {
+            position: absolute;
+            top: 20px;
+            left: 65px;
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(4rem, 12vw, 7rem);
+            font-size: 1.8rem;
             font-weight: 900;
             background: linear-gradient(135deg, #00ffff 0%, #0080ff 50%, #ff00ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin: 20px 0;
-            filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.6));
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
             line-height: 1;
+            z-index: 10;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex: 1;
+            text-align: center;
+            padding-top: 55px;
+            overflow: hidden;
         }
 
         .modal-element-name {
-            font-family: 'Exo 2', sans-serif;
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            font-weight: 600;
-            color: #ffd700;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-            margin-bottom: 30px;
+            display: none;
         }
 
         .modal-header {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: #00ffff;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
         }
 
         .electron-config {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #fff;
             background: rgba(0, 255, 255, 0.05);
-            padding: 20px;
+            padding: 20px 15px;
             border-radius: 15px;
             border: 2px solid rgba(0, 255, 255, 0.3);
             max-width: 100%;
-            max-height: 280px;
             overflow-x: auto;
             overflow-y: auto;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Estilo de la barra de scroll */
@@ -665,8 +666,8 @@
         .orbital-diagram {
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            padding: 8px;
+            gap: 8px;
+            padding: 5px;
             min-width: 280px;
         }
 
@@ -678,27 +679,27 @@
 
         .level-label {
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: #00ffff;
-            min-width: 35px;
+            min-width: 42px;
             font-weight: 600;
         }
 
         .orbitals-row {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             align-items: center;
         }
 
         .orbital {
-            width: 35px;
-            height: 35px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             font-weight: 700;
             color: #fff;
             position: relative;
@@ -811,22 +812,33 @@
             }
 
             .modal-content {
-                padding: 30px 20px;
-                aspect-ratio: 0.8;
+                padding: 25px 15px;
+                max-height: 85vh;
+            }
+
+            .modal-atomic-number {
+                font-size: 1.2rem;
+                top: 15px;
+                left: 20px;
             }
 
             .modal-symbol {
-                font-size: 4rem;
+                font-size: 1.4rem;
+                top: 15px;
+                left: 55px;
             }
 
-            .modal-element-name {
-                font-size: 1.3rem;
+            .modal-body {
+                padding-top: 50px;
+            }
+
+            .modal-header {
+                font-size: 0.85rem;
             }
 
             .electron-config {
-                font-size: 0.95rem;
-                padding: 15px 10px;
-                max-height: 250px;
+                font-size: 0.85rem;
+                padding: 12px 8px;
             }
 
             .electron-config::-webkit-scrollbar {
@@ -835,18 +847,18 @@
             }
 
             .orbital {
-                width: 32px;
-                height: 32px;
-                font-size: 0.65rem;
+                width: 38px;
+                height: 38px;
+                font-size: 0.7rem;
             }
 
             .level-label {
-                font-size: 0.7rem;
-                min-width: 30px;
+                font-size: 0.75rem;
+                min-width: 38px;
             }
 
             .orbitals-row {
-                gap: 6px;
+                gap: 8px;
             }
 
             .energy-level {
@@ -854,7 +866,7 @@
             }
 
             .orbital-diagram {
-                gap: 4px;
+                gap: 6px;
             }
         }
     </style>
@@ -864,7 +876,7 @@
     <div class="stars" id="stars"></div>
 
     <!-- Logo superior izquierdo -->
-    <img src="logo.png" alt="ConfiElectro Logo" class="top-logo">
+    <img src="logo.png" alt="ConfiElectro Logo" class="top-logo" onerror="this.style.display='none'">
 
     <div class="container">
         <!-- Logo Atómico -->
