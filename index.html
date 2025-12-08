@@ -625,6 +625,36 @@
             letter-spacing: 1.5px;
         }
 
+        .period-group-info {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .info-box {
+            background: rgba(255, 0, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        .info-box-label {
+            font-size: 0.7rem;
+            color: #ff00ff;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-box-value {
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
         .electron-config {
             font-family: 'Orbitron', sans-serif;
             font-size: 1rem;
@@ -640,6 +670,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+        }
+
+        /* SVG para las líneas diagonales de Möeller */
+        .moeller-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .moeller-line {
+            stroke: rgba(100, 150, 255, 0.4);
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
         }
 
         /* Estilo de la barra de scroll */
@@ -666,15 +715,18 @@
         .orbital-diagram {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
             padding: 5px;
             min-width: 280px;
+            position: relative;
+            z-index: 1;
         }
 
         .energy-level {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
+            position: relative;
         }
 
         .level-label {
@@ -687,19 +739,19 @@
 
         .orbitals-row {
             display: flex;
-            gap: 12px;
+            gap: 18px;
             align-items: center;
         }
 
         .orbital {
-            width: 48px;
-            height: 48px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: #fff;
             position: relative;
@@ -847,9 +899,9 @@
             }
 
             .orbital {
-                width: 38px;
-                height: 38px;
-                font-size: 0.7rem;
+                width: 30px;
+                height: 30px;
+                font-size: 0.6rem;
             }
 
             .level-label {
@@ -858,15 +910,15 @@
             }
 
             .orbitals-row {
-                gap: 8px;
+                gap: 12px;
             }
 
             .energy-level {
-                gap: 8px;
+                gap: 10px;
             }
 
             .orbital-diagram {
-                gap: 6px;
+                gap: 10px;
             }
         }
     </style>
@@ -949,6 +1001,16 @@
             <div class="modal-body">
                 <div class="modal-symbol" id="modalSymbol">H</div>
                 <div class="modal-element-name" id="modalElementName">Hidrógeno</div>
+                <div class="period-group-info" id="periodGroupInfo">
+                    <div class="info-box">
+                        <div class="info-box-label">Período</div>
+                        <div class="info-box-value" id="periodValue">1</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="info-box-label">Grupo</div>
+                        <div class="info-box-value" id="groupValue">1</div>
+                    </div>
+                </div>
                 <h3 class="modal-header">Configuración Electrónica</h3>
                 <div class="electron-config" id="electronConfig">1s¹</div>
             </div>
@@ -970,28 +1032,28 @@
                 { n: 8, orbitals: [{ type: 's', max: 2 }] }
             ];
 
-            // Orden de llenado según el principio de Aufbau
+            // Orden de llenado según el principio de Aufbau (Regla de Madelung)
             const fillOrder = [
-                { n: 1, type: 's', max: 2 },
-                { n: 2, type: 's', max: 2 },
-                { n: 2, type: 'p', max: 6 },
-                { n: 3, type: 's', max: 2 },
-                { n: 3, type: 'p', max: 6 },
-                { n: 4, type: 's', max: 2 },
-                { n: 3, type: 'd', max: 10 },
-                { n: 4, type: 'p', max: 6 },
-                { n: 5, type: 's', max: 2 },
-                { n: 4, type: 'd', max: 10 },
-                { n: 5, type: 'p', max: 6 },
-                { n: 6, type: 's', max: 2 },
-                { n: 4, type: 'f', max: 14 },
-                { n: 5, type: 'd', max: 10 },
-                { n: 6, type: 'p', max: 6 },
-                { n: 7, type: 's', max: 2 },
-                { n: 5, type: 'f', max: 14 },
-                { n: 6, type: 'd', max: 10 },
-                { n: 7, type: 'p', max: 6 },
-                { n: 8, type: 's', max: 2 }
+                { n: 1, type: 's', max: 2 },   // 1s
+                { n: 2, type: 's', max: 2 },   // 2s
+                { n: 2, type: 'p', max: 6 },   // 2p
+                { n: 3, type: 's', max: 2 },   // 3s
+                { n: 3, type: 'p', max: 6 },   // 3p
+                { n: 4, type: 's', max: 2 },   // 4s
+                { n: 3, type: 'd', max: 10 },  // 3d
+                { n: 4, type: 'p', max: 6 },   // 4p
+                { n: 5, type: 's', max: 2 },   // 5s
+                { n: 4, type: 'd', max: 10 },  // 4d
+                { n: 5, type: 'p', max: 6 },   // 5p
+                { n: 6, type: 's', max: 2 },   // 6s
+                { n: 4, type: 'f', max: 14 },  // 4f
+                { n: 5, type: 'd', max: 10 },  // 5d
+                { n: 6, type: 'p', max: 6 },   // 6p
+                { n: 7, type: 's', max: 2 },   // 7s
+                { n: 5, type: 'f', max: 14 },  // 5f
+                { n: 6, type: 'd', max: 10 },  // 6d
+                { n: 7, type: 'p', max: 6 },   // 7p
+                { n: 8, type: 's', max: 2 }    // 8s
             ];
 
             // Calcular la configuración electrónica
@@ -1006,11 +1068,30 @@
                 if (remaining <= 0) break;
             }
 
-            // Generar HTML del diagrama
-            let html = '<div class="orbital-diagram">';
+            // Crear un mapa del orden de llenado para saber qué orbital sigue
+            const fillOrderMap = {};
+            for (let i = 0; i < fillOrder.length - 1; i++) {
+                const current = `${fillOrder[i].n}${fillOrder[i].type}`;
+                const next = `${fillOrder[i + 1].n}${fillOrder[i + 1].type}`;
+                fillOrderMap[current] = {
+                    next: next,
+                    nextN: fillOrder[i + 1].n,
+                    currentN: fillOrder[i].n
+                };
+            }
+
+            // Generar HTML del diagrama con IDs para conexiones
+            let html = '';
+
+            // Agregar SVG para las líneas diagonales de Möeller
+            html += '<svg class="moeller-lines" id="moeller-svg">';
+            html += '</svg>';
+
+            html += '<div class="orbital-diagram" id="orbital-diagram-container">';
+            let orbitalIndex = 0;
 
             for (let level of orbitalStructure) {
-                html += `<div class="energy-level">`;
+                html += `<div class="energy-level" data-level="${level.n}">`;
                 html += `<div class="level-label">n=${level.n}</div>`;
                 html += `<div class="orbitals-row">`;
 
@@ -1021,7 +1102,7 @@
                     const fillClass = isFilled ? 'filled' : 'empty';
                     const superscript = electrons > 0 ? `<sup>${electrons}</sup>` : '';
 
-                    html += `<div class="orbital ${orbital.type} ${fillClass}" title="${key}: ${electrons}/${orbital.max} electrones">`;
+                    html += `<div class="orbital ${orbital.type} ${fillClass}" id="orbital-${key}" data-key="${key}" title="${key}: ${electrons}/${orbital.max} electrones">`;
                     html += `${level.n}${orbital.type}${superscript}`;
                     html += `</div>`;
                 }
@@ -1030,16 +1111,17 @@
             }
 
             html += '</div>';
+
             return html;
         }
 
         // Datos de los elementos químicos con información adicional
         const elements = [
-            { number: 1, symbol: 'H', name: 'Hidrógeno', mass: '1.008', category: 'No metal', state: 'Gas' },
-            { number: 2, symbol: 'He', name: 'Helio', mass: '4.003', category: 'Gas noble', state: 'Gas' },
-            { number: 3, symbol: 'Li', name: 'Litio', mass: '6.941', category: 'Metal alcalino', state: 'Sólido' },
-            { number: 4, symbol: 'Be', name: 'Berilio', mass: '9.012', category: 'Metal alcalinotérreo', state: 'Sólido' },
-            { number: 5, symbol: 'B', name: 'Boro', mass: '10.811', category: 'Metaloide', state: 'Sólido' },
+            { number: 1, symbol: 'H', name: 'Hidrógeno', mass: '1.008', category: 'No metal', state: 'Gas', period: 1, group: 1 },
+            { number: 2, symbol: 'He', name: 'Helio', mass: '4.003', category: 'Gas noble', state: 'Gas', period: 1, group: 18 },
+            { number: 3, symbol: 'Li', name: 'Litio', mass: '6.941', category: 'Metal alcalino', state: 'Sólido', period: 2, group: 1 },
+            { number: 4, symbol: 'Be', name: 'Berilio', mass: '9.012', category: 'Metal alcalinotérreo', state: 'Sólido', period: 2, group: 2 },
+            { number: 5, symbol: 'B', name: 'Boro', mass: '10.811', category: 'Metaloide', state: 'Sólido', period: 2, group: 13 },
             { number: 6, symbol: 'C', name: 'Carbono', mass: '12.011', category: 'No metal', state: 'Sólido' },
             { number: 7, symbol: 'N', name: 'Nitrógeno', mass: '14.007', category: 'No metal', state: 'Gas' },
             { number: 8, symbol: 'O', name: 'Oxígeno', mass: '15.999', category: 'No metal', state: 'Gas' },
@@ -1242,7 +1324,218 @@
             document.getElementById('modalElementName').textContent = currentElement.name;
             document.getElementById('electronConfig').innerHTML = config;
 
+            // Mostrar período y grupo
+            const periodGroup = getPeriodAndGroup(currentElement.number);
+            document.getElementById('periodValue').textContent = periodGroup.period;
+            document.getElementById('groupValue').textContent = periodGroup.group;
+
             modal.classList.add('active');
+
+            // Esperar a que el DOM se actualice para dibujar las líneas de Möeller
+            setTimeout(() => {
+                drawMoellerLines();
+            }, 100);
+        }
+
+        // Función para determinar el período y grupo
+        function getPeriodAndGroup(atomicNumber) {
+            // Tabla de períodos y grupos para todos los elementos
+            const periodGroupTable = {
+                1: { period: 1, group: 1 },    // H
+                2: { period: 1, group: 18 },   // He
+                3: { period: 2, group: 1 },    // Li
+                4: { period: 2, group: 2 },    // Be
+                5: { period: 2, group: 13 },   // B
+                6: { period: 2, group: 14 },   // C
+                7: { period: 2, group: 15 },   // N
+                8: { period: 2, group: 16 },   // O
+                9: { period: 2, group: 17 },   // F
+                10: { period: 2, group: 18 },  // Ne
+                11: { period: 3, group: 1 },   // Na
+                12: { period: 3, group: 2 },   // Mg
+                13: { period: 3, group: 13 },  // Al
+                14: { period: 3, group: 14 },  // Si
+                15: { period: 3, group: 15 },  // P
+                16: { period: 3, group: 16 },  // S
+                17: { period: 3, group: 17 },  // Cl
+                18: { period: 3, group: 18 },  // Ar
+                19: { period: 4, group: 1 },   // K
+                20: { period: 4, group: 2 },   // Ca
+                21: { period: 4, group: 3 },   // Sc
+                22: { period: 4, group: 4 },   // Ti
+                23: { period: 4, group: 5 },   // V
+                24: { period: 4, group: 6 },   // Cr
+                25: { period: 4, group: 7 },   // Mn
+                26: { period: 4, group: 8 },   // Fe
+                27: { period: 4, group: 9 },   // Co
+                28: { period: 4, group: 10 },  // Ni
+                29: { period: 4, group: 11 },  // Cu
+                30: { period: 4, group: 12 },  // Zn
+                31: { period: 4, group: 13 },  // Ga
+                32: { period: 4, group: 14 },  // Ge
+                33: { period: 4, group: 15 },  // As
+                34: { period: 4, group: 16 },  // Se
+                35: { period: 4, group: 17 },  // Br
+                36: { period: 4, group: 18 },  // Kr
+                37: { period: 5, group: 1 },   // Rb
+                38: { period: 5, group: 2 },   // Sr
+                39: { period: 5, group: 3 },   // Y
+                40: { period: 5, group: 4 },   // Zr
+                41: { period: 5, group: 5 },   // Nb
+                42: { period: 5, group: 6 },   // Mo
+                43: { period: 5, group: 7 },   // Tc
+                44: { period: 5, group: 8 },   // Ru
+                45: { period: 5, group: 9 },   // Rh
+                46: { period: 5, group: 10 },  // Pd
+                47: { period: 5, group: 11 },  // Ag
+                48: { period: 5, group: 12 },  // Cd
+                49: { period: 5, group: 13 },  // In
+                50: { period: 5, group: 14 },  // Sn
+                51: { period: 5, group: 15 },  // Sb
+                52: { period: 5, group: 16 },  // Te
+                53: { period: 5, group: 17 },  // I
+                54: { period: 5, group: 18 },  // Xe
+                55: { period: 6, group: 1 },   // Cs
+                56: { period: 6, group: 2 },   // Ba
+                57: { period: 6, group: 3 },   // La (Lantánidos 57-71)
+                58: { period: 6, group: 3 },   // Ce
+                59: { period: 6, group: 3 },   // Pr
+                60: { period: 6, group: 3 },   // Nd
+                61: { period: 6, group: 3 },   // Pm
+                62: { period: 6, group: 3 },   // Sm
+                63: { period: 6, group: 3 },   // Eu
+                64: { period: 6, group: 3 },   // Gd
+                65: { period: 6, group: 3 },   // Tb
+                66: { period: 6, group: 3 },   // Dy
+                67: { period: 6, group: 3 },   // Ho
+                68: { period: 6, group: 3 },   // Er
+                69: { period: 6, group: 3 },   // Tm
+                70: { period: 6, group: 3 },   // Yb
+                71: { period: 6, group: 3 },   // Lu
+                72: { period: 6, group: 4 },   // Hf
+                73: { period: 6, group: 5 },   // Ta
+                74: { period: 6, group: 6 },   // W
+                75: { period: 6, group: 7 },   // Re
+                76: { period: 6, group: 8 },   // Os
+                77: { period: 6, group: 9 },   // Ir
+                78: { period: 6, group: 10 },  // Pt
+                79: { period: 6, group: 11 },  // Au
+                80: { period: 6, group: 12 },  // Hg
+                81: { period: 6, group: 13 },  // Tl
+                82: { period: 6, group: 14 },  // Pb
+                83: { period: 6, group: 15 },  // Bi
+                84: { period: 6, group: 16 },  // Po
+                85: { period: 6, group: 17 },  // At
+                86: { period: 6, group: 18 },  // Rn
+                87: { period: 7, group: 1 },   // Fr
+                88: { period: 7, group: 2 },   // Ra
+                89: { period: 7, group: 3 },   // Ac (Actínidos 89-103)
+                90: { period: 7, group: 3 },   // Th
+                91: { period: 7, group: 3 },   // Pa
+                92: { period: 7, group: 3 },   // U
+                93: { period: 7, group: 3 },   // Np
+                94: { period: 7, group: 3 },   // Pu
+                95: { period: 7, group: 3 },   // Am
+                96: { period: 7, group: 3 },   // Cm
+                97: { period: 7, group: 3 },   // Bk
+                98: { period: 7, group: 3 },   // Cf
+                99: { period: 7, group: 3 },   // Es
+                100: { period: 7, group: 3 },  // Fm
+                101: { period: 7, group: 3 },  // Md
+                102: { period: 7, group: 3 },  // No
+                103: { period: 7, group: 3 },  // Lr
+                104: { period: 7, group: 4 },  // Rf
+                105: { period: 7, group: 5 },  // Db
+                106: { period: 7, group: 6 },  // Sg
+                107: { period: 7, group: 7 },  // Bh
+                108: { period: 7, group: 8 },  // Hs
+                109: { period: 7, group: 9 },  // Mt
+                110: { period: 7, group: 10 }, // Ds
+                111: { period: 7, group: 11 }, // Rg
+                112: { period: 7, group: 12 }, // Cn
+                113: { period: 7, group: 13 }, // Nh
+                114: { period: 7, group: 14 }, // Fl
+                115: { period: 7, group: 15 }, // Mc
+                116: { period: 7, group: 16 }, // Lv
+                117: { period: 7, group: 17 }, // Ts
+                118: { period: 7, group: 18 }  // Og
+            };
+
+            return periodGroupTable[atomicNumber] || { period: '-', group: '-' };
+        }
+
+        // Función para dibujar las líneas diagonales de Möeller
+        function drawMoellerLines() {
+            const svg = document.getElementById('moeller-svg');
+            if (!svg) return;
+
+            // Limpiar líneas anteriores
+            svg.innerHTML = '';
+
+            // Definir las diagonales según el orden de llenado de Aufbau
+            // Cada diagonal agrupa orbitales con la misma suma n+l
+            const diagonals = [
+                ['1s'],
+                ['2s'],
+                ['2p', '3s'],
+                ['3p', '4s'],
+                ['3d', '4p', '5s'],
+                ['4d', '5p', '6s'],
+                ['4f', '5d', '6p', '7s'],
+                ['5f', '6d', '7p', '8s']
+            ];
+
+            diagonals.forEach(diagonal => {
+                const orbitalElements = [];
+
+                // Obtener elementos de los orbitales en esta diagonal
+                diagonal.forEach(orbitalKey => {
+                    const element = document.getElementById(`orbital-${orbitalKey}`);
+                    if (element) {
+                        orbitalElements.push(element);
+                    }
+                });
+
+                // Si hay al menos 2 orbitales en la diagonal, dibujar la línea
+                if (orbitalElements.length >= 2) {
+                    const svgRect = svg.getBoundingClientRect();
+                    const firstElement = orbitalElements[0];
+                    const lastElement = orbitalElements[orbitalElements.length - 1];
+
+                    const firstRect = firstElement.getBoundingClientRect();
+                    const lastRect = lastElement.getBoundingClientRect();
+
+                    // Calcular coordenadas relativas al SVG
+                    const x1 = firstRect.left + firstRect.width / 2 - svgRect.left;
+                    const y1 = firstRect.top + firstRect.height / 2 - svgRect.top;
+                    const x2 = lastRect.left + lastRect.width / 2 - svgRect.left;
+                    const y2 = lastRect.top + lastRect.height / 2 - svgRect.top;
+
+                    // Extender la línea más allá de los orbitales para que se vea mejor
+                    const dx = x2 - x1;
+                    const dy = y2 - y1;
+                    const length = Math.sqrt(dx * dx + dy * dy);
+                    const extension = 30; // píxeles para extender
+
+                    const extendX = (dx / length) * extension;
+                    const extendY = (dy / length) * extension;
+
+                    const startX = x1 - extendX;
+                    const startY = y1 - extendY;
+                    const endX = x2 + extendX;
+                    const endY = y2 + extendY;
+
+                    // Crear la línea
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', startX);
+                    line.setAttribute('y1', startY);
+                    line.setAttribute('x2', endX);
+                    line.setAttribute('y2', endY);
+                    line.setAttribute('class', 'moeller-line');
+
+                    svg.appendChild(line);
+                }
+            });
         }
 
         // Cerrar modal
